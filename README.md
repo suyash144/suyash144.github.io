@@ -5,7 +5,9 @@ I am currently a Research Software Engineer at Cortexlab, UCL Queen Square Insti
 - Bayesian Radar Cosplace: my Masters' research project at the Oxford Robotics Institute, masterfully supervised by Matt Gadd and Paul Newman. We published an article on the project [here](https://doi.org/10.1049/rsn2.70002).
 
 I am also doing some work with the Visual Geometry Group at Oxford, where my focus is on improving transformer efficiency for video generation.
+
 Before moving to London, I was at Oxford University for 4 years studying for my MEng degree, and I have worked at the Computer Vision Lab at ETH Zurich. 
+
 Broadly, I am interested in machine learning and computational neuroscience but I have also studied computer vision, robotics, control theory, optimisation and bioinformatics. I am always interested in exploring these fields further. 
 
 You can find my LinkedIn [here](https://www.linkedin.com/in/suyash--agarwal/). 
