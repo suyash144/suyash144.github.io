@@ -24,7 +24,7 @@ navigation:
 linkedin_username: suyash--agarwal # From your original README.md
 
 # Optional: Setup for Excerpts on the Blog page (if you use them)
-excerpt_separator: ```
+# excerpt_separator: ```
 
 ### 2. `index.md` (Home/About Page)
 
