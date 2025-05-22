@@ -7,7 +7,7 @@ title: Home
 
 I am currently a Research Software Engineer at Cortexlab, UCL Queen Square Institute of Neurology.
 
-I work on machine learning and AI methods for neural data analysis with Prof. Kenneth Harris.
+I work on machine learning and AI methods for computational neuroscience with Prof. Kenneth Harris.
 
 Before moving to London, I was at Oxford University for 4 years studying for my MEng degree, and I have worked at the Computer Vision Lab at ETH Zurich.
 

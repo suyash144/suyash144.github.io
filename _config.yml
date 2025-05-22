@@ -4,10 +4,9 @@ plugins:
   - jekyll-seo-tag # For better SEO
 
 title: Suyash Agarwal #
-description: Machine Learning and Neuroscience #
+description: Neural methods for neural data #
 
 # Navigation items (will be used in _includes/header.html)
-# Ensure the URLs match the filenames (e.g., /projects for projects.md)
 navigation:
   - title: Home
     url: /
