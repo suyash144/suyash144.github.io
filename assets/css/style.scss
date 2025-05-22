@@ -1,0 +1,58 @@
+---
+---
+// This line is needed for Jekyll to process the file.
+
+// Import the Cayman theme's styles
+@import "{{ site.theme }}";
+
+/* Your custom styles can go here */
+
+// Example Navigation Styles (from _includes/header.html comments)
+nav ul {
+  list-style-type: none;
+  padding: 0;
+  margin: 20px 0 10px 0; // Added some bottom margin
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px; // Space between items
+}
+
+nav ul li {
+  margin-bottom: 5px; // Ensure wrapping looks okay
+}
+
+nav ul li a {
+  text-decoration: none;
+  padding: 8px 12px;
+  border: 1px solid #ddd; // Lighter border
+  border-radius: 5px;
+  color: #337ab7; // A common link color
+  display: block; // Make the whole area clickable
+}
+
+nav ul li a:hover {
+  background-color: #f5f5f5;
+  border-color: #ccc;
+}
+
+nav ul li a.current {
+  font-weight: bold;
+  background-color: #e9ecef; // A slightly different background for current
+  color: #000;
+  border-color: #bbb;
+}
+
+// Style for the profile image on the homepage
+// You might need to adjust based on the image in index.md
+// For example, if you used <img src="..." alt="Suyash Agarwal" class="profile-pic">
+// Then you would select it with .profile-pic
+// The current index.md uses inline styles, which is also fine for a single image.
+
+// Footer styling (optional)
+footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid #eee;
+  font-size: 0.9em;
+  color: #666;
+}
