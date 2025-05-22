@@ -3,7 +3,7 @@ layout: default
 title: Home
 ---
 
-<img src="{{ '/assets/images/profile.png' | relative_url }}" alt="Suyash Agarwal" style="float: right; width: 150px; margin-left: 20px; border-radius: 50%;">
+<img src="{{ '/assets/images/profile.jpeg' | relative_url }}" alt="Suyash Agarwal" style="float: right; width: 150px; margin-left: 20px; border-radius: 50%;">
 
 I am currently a Research Software Engineer at Cortexlab, UCL Queen Square Institute of Neurology.
 

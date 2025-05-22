@@ -2,7 +2,7 @@
   <ul>
     {% for item in site.navigation %}
       <li>
-        <a href="{{ item.url | relative_url }}" {% if page.url == item.url %}class="current"{% endif %}>
+        <a href="{{ item.url | relative_url }}" {% if page.url = item.url %}class="current"{% endif %}>
           {{ item.title }}
         </a>
       </li>
