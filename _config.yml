@@ -12,10 +12,10 @@ navigation:
     url: /
   - title: Projects
     url: /projects
-  - title: Publications
-    url: /publications
   - title: CV
     url: /cv
+  - title: Publications
+    url: /publications
   - title: Blog
     url: /blog
 

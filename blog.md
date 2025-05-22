@@ -19,8 +19,5 @@ Welcome to my blog! Here I'll share updates on projects, thoughts on machine lea
 </ul>
 
 {% if site.posts.size == 0 %}
-  <p>No posts yet. Check back soon!</p>
+  <p>Failed to load blog.</p>
 {% endif %}
-
-` in your post where you want the excerpt to end.
--->
