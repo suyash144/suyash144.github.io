@@ -5,11 +5,9 @@ title: Projects
 
 ## Current and Recent Projects
 
-Here are some of the projects I've been working on
-
 ### DeepUnitMatch
 A neural network method for tracking neurons via their electrophysiological spike waveforms. This uses contrastive learning and a spatio-temporal autoencoder architecture to beat current state-of-the-art methods. We are in the process of writing this up!
-<img src="{{ '/assets/images/DeepUnitMatch.png' | relative_url }}" alt="DeepUnitMatch" style="width: 100%; margin-bottom: 15px;">
+<img src="{{ '/assets/images/DeepUnitMatch.png' | relative_url }}" alt="DeepUnitMatch" style="width: 100%; margin-bottom: 15px; margin-top: 10px;">
 
 <img src="{{ '/assets/images/alfred-logo.png' | relative_url }}" alt="Alfred" style="float: right; width: 150px; margin-left: 20px; border-radius: 10%;">
 
