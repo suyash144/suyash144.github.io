@@ -16,6 +16,8 @@ navigation:
     url: /cv
   - title: Publications
     url: /publications
+  - title: Blog
+    url: /blog
 
 # Social links (optional, can be used in footer or elsewhere)
 linkedin_username: suyash--agarwal # From your original README.md
