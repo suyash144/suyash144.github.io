@@ -38,3 +38,10 @@ To explain this, the left plot is AUC (an accuracy score between 0 and 1) and th
 <img src="{{ '/assets/images/res2.png' | relative_url }}" alt="Suyash Agarwal" style="width: 100%;">
 
 Hmm. The Naive Bayes (which has both waveform similarity and spatial information to work with) has a similar AUC to a method that only looks at waveform similarity. The latter also finds *more* matches, though this may just be because the spatial filtering step acts only to reduce the number of matches returned.
+
+
+### What is going wrong?
+
+To investigate this, I made a very specific plot (credit to Célian Bimbard for this idea). 
+
+
