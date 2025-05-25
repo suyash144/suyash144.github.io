@@ -17,7 +17,6 @@ In a recent project, I tried to implement a Naive Bayes classifier to classify n
 The neurons are recorded across many sessions (think days) and the task is ultimately to determine how neurons recorded in one session map to neurons recorded in another. 
 Declaring a pair of neurons as a 'match' means it is actually the same neuron, recorded in two different sessions. A non-match means they are different neurons. 
 
-
 The information we had to do this was the following:
 - the shape of the waveform the neuron produces when it spikes (fires an action potential)
 - the spatial location of the neuron, as recorded by the probe
@@ -40,8 +39,17 @@ To explain this, the left plot is AUC (an accuracy score between 0 and 1) and th
 Hmm. The Naive Bayes (which has both waveform similarity and spatial information to work with) has a similar AUC to a method that only looks at waveform similarity. The latter also finds *more* matches, though this may just be because the spatial filtering step acts only to reduce the number of matches returned.
 
 
-### What is going wrong?
+### Training without labels: an aside
 
-To investigate this, I made a very specific plot (credit to Célian Bimbard for this idea). 
+Before we can understand what is going wrong here, I need to detail how exactly I trained the Naive Bayes. This requires labelled data, which is something that we always struggle with in this project. We never actually have ground truth neuron labels, so the machine learning methods we could use were either self-supervised (training the autoencoder) or they used a quasi-ground truth that we could construct from the fact that within a session, we know which spikes come from which neuron thanks to upstream spike-sorting software. We also have two copies of each neuron's waveform (averaged over the first and second half of the session). This means we can do contrastive learning if we train only on within-session data, because we have pairs of neurons which are the same and pair of neurons which are different (at least as far as we trust spike sorting). I adopted the same strategy when training the Naive Bayes.
+
+
+For each feature (similarity and distance), we can make conditional distributions $p(feature | label)$ for each label (match and non-match) by comparing neurons to their other copies for positive pairs and comparing them to other neurons for negative pairs. 
+
+
+### Understanding the issue
+
+To investigate the poor performance, I went back to a plot that we often use for sanity-checking (credit to Célian Bimbard for the idea). You just take a single pair of sessions and organise the neurons into a matrix. 
+
 
 
