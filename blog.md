@@ -12,7 +12,6 @@ Welcome to my blog! Here I'll share updates on projects, thoughts on machine lea
     <li>
       <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
       <p><small>Published on {{ post.date | date: "%B %d, %Y" }}</small></p>
-      <p><a href="{{ post.url | relative_url }}">Read more...</a></p>
     </li>
   {% endfor %}
 </ul>
