@@ -81,18 +81,18 @@ So given contradictory information (low distance *and* low waveform similarity s
 
 ### Some very hand-wavey maths
 
-From a training point of view, the Naive Bayes *by construction* learns that every neuron that is a match (which we define as on-diagonal, within-session neurons, ie the spike-sorting output) has 0 distance. Likewise, most non-match pairs have non-zero distance (different neurons in the same session are unlikely to be in the same spatial location). So from the perspective of the NB, it can achieve near-perfect classification accuracy by only looking at distance! Waveform similarity on the other hand is a much noisier signal so will be weighted less as a feature.
+From a training point of view, the Naive Bayes *by construction* learns that every neuron that is a match (which we define as on-diagonal, within-session neurons, ie the spike-sorting output) has 0 distance. Likewise, most non-match pairs have non-zero distance (different neurons in the same session are unlikely to be in the same spatial location). So from the perspective of the Naive Bayes, it can achieve near-perfect classification accuracy by only looking at distance! Waveform similarity on the other hand is a much noisier signal so will be weighted less as a feature.
 This is at odds with what we know from earlier work in the project, which is that:
 - The neural network similarity is a good classifier, it just doesn’t have distance information.
 - Distance alone is not a good classifier (see the distance matrices).
 
-I will try and give some vague mathematical intuition for this based on Bayes' rule. The [Wikipedia article](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) does a pretty good job of explaining the naive assumption and how the classifier works so I won't rehash that here. Assuming you're up to speed on that, the Naive Bayes will compute the following match probability for a pair of neurons that have are spatially close (this is deliberately vague, hence the lack of rigour in this section):
+I will try and give some vague mathematical intuition for this based on Bayes' rule. The [Wikipedia article](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) does a pretty good job of explaining the naive assumption and how the classifier works so I won't rehash that here. Assuming you're up to speed on that, the Naive Bayes will compute the following match probability for a pair of neurons that are spatially close (this is deliberately vague, hence the lack of rigour in this section):
 
 $$p(\text{match} \mid \text{close}) = p(\text{close} \mid \text{match}) p(\text{match}) / p(\text{close})$$
 
 And during training, we basically set $p(\text{close} \mid \text{match}) = 1$. So this collapses to
 
-$$p(\text{match} \mid \text{close}) = p(\text{match}) / p(\text{close})$$.
+$$p(\text{match} \mid \text{close}) = p(\text{match}) / p(\text{close})$$
 
 On the other hand, if the distance is non-zero,
 
@@ -100,7 +100,7 @@ $$p(\text{match} \mid \text{far}) = p(\text{far} \mid \text{match}) p(\text{matc
 
 And $p(\text{far} \mid \text{match})$ is set to 0 during training. So the Naive Bayes can *never* assign non-zero match probability to a pair of neurons that are spatially distant. So because the conditional distribution of distance values fed into the Naive Bayes was a delta function (it is non-zero only when the distance is zero and zero everywhere else), the whole classifier totally overfits to distance. This is despite waveform similarity actually being a more informative feature. 
 
-The neural network is constrained to fit some nonlinear transformation to the actual waveforms themselves so it can't follow the spike-sorting output perfectly, hence the apparent noise in that signal.
+The neural network is constrained to fit some nonlinear transformation to the actual waveforms themselves so it can't follow the spike-sorting output perfectly, hence the apparent 'noise' in that signal.
 
 ### The fix
 
