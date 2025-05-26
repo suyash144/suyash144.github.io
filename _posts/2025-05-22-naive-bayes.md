@@ -86,5 +86,6 @@ This is at odds with what we know from earlier work in the project, which is tha
 - The neural network similarity is a good classifier, it just doesn’t have distance information.
 - Distance alone is not a good classifier (see the distance matrices).
 
-I will try and give some vague mathematical intuition for this based on Bayes' rule, which is how the Naive Bayes classifier works. The [Wikipedia article](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) does a pretty good job of explaining the naive assumption and how the classifier works so I won't rehash that here. Assuming you're up to speed on that, the Naive Bayes will compute the following match probability for a pair of neurons that are spatially close together:
+I will try and give some vague mathematical intuition for this based on Bayes' rule. The [Wikipedia article](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) does a pretty good job of explaining the naive assumption and how the classifier works so I won't rehash that here. Assuming you're up to speed on that, the Naive Bayes will compute the following match probability for a pair of neurons that are spatially close together:
 
+\\[p(\text{match} \mid \text{close}) = p(\text{close} \mid \text{match}) p(\text{match}) / p(\text{close})\\]

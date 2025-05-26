@@ -14,4 +14,4 @@ Before moving to London, I was at Oxford University for 4 years studying for my 
 Broadly, I am interested in machine learning and computational neuroscience but I have also studied signal processing, control theory, optimisation and bioinformatics. I am always interested in exploring these fields further.
 
 Outside of work, you'll find me on the tennis court or climbing!
-You can find my LinkedIn [here](https://www.linkedin.com/in/suyash--agarwal/).
+You can see my LinkedIn [here](https://www.linkedin.com/in/suyash--agarwal/).
