@@ -25,5 +25,8 @@ linkedin_username: suyash--agarwal # From your original README.md
 # Optional: Setup for Excerpts on the Blog page (if you use them)
 # excerpt_separator: ```
 
-# kramdown:
-#   math_engine: katex
+markdown:
+  kramdown
+
+kramdown:
+  math_engine: katex

@@ -52,7 +52,7 @@ For each feature (similarity and distance), we can make conditional distribution
 To investigate the poor performance, I went back to a plot that we often use for sanity-checking. We just take a single pair of sessions and organise the neurons into a matrix. Each cell in the matrix is the value of some metric for the corresponding pair of neurons. The top-left and bottom-right parts of the matrix are comparing neurons within the same session while the other two are comparing across sessions. In the ideal case, each of the four sub-matrices would have a strong diagonal with everything off-diagonal being small. We should at least expect this to be the the case for the main diagonal of the full matrix, as neurons are generally more similar to themselves than to other neurons. We can see this for the neural net similarity matrix:
 
 
-<img src="{{ '/assets/images/posts/dnnsim.png' | relative_url }}" alt="Waveform similarity matrix" style="width: 50%; text-align: center;">
+<img src="{{ '/assets/images/posts/dnnsim.png' | relative_url }}" alt="Waveform similarity matrix" style="display: block; width: 50%; margin-left: auto; margin-right: auto;">
 
 The main diagonal is strong, with weaker sub-diagonals for the two across-session sub-matrices. This gives us some indication that this method will perform well at matching neurons, as:
 - We have a metric that confirms that neurons are more similar to themselves than to other neurons.
@@ -60,7 +60,7 @@ The main diagonal is strong, with weaker sub-diagonals for the two across-sessio
 
  But for the Naive Bayes match probabilities:
 
-<img src="{{ '/assets/images/posts/NBProb.png' | relative_url }}" alt="Naive Bayes output" style="width: 50%; text-align: center;">
+<img src="{{ '/assets/images/posts/NBProb.png' | relative_url }}" alt="Naive Bayes output" style="display: block; width: 50%; margin-left: auto; margin-right: auto;">
 
 We have large off-diagonal match probabilities for the same-session sub-matrices. This is despite explicitly labelling these as *different* neurons during training. So why is this happening?
 
@@ -81,7 +81,10 @@ So given contradictory information (low distance *and* low waveform similarity s
 
 ### Some very hand-wavey maths
 
-From a training point of view, the Naive Bayes learns that every neuron that is a match (which we define as on-diagonal, within-session neurons, ie the spike-sorting output) has 0 distance by construction. Likewise, most non-match pairs have non-zero distance (different neurons in the same session are unlikely to be in the same spatial location). So from the perspective of the NB, it can achieve near-perfect classification accuracy by only looking at distance! Waveform similarity on the other hand is a much noisier signal so will be weighted less as a feature.
+From a training point of view, the Naive Bayes *by construction* learns that every neuron that is a match (which we define as on-diagonal, within-session neurons, ie the spike-sorting output) has 0 distance. Likewise, most non-match pairs have non-zero distance (different neurons in the same session are unlikely to be in the same spatial location). So from the perspective of the NB, it can achieve near-perfect classification accuracy by only looking at distance! Waveform similarity on the other hand is a much noisier signal so will be weighted less as a feature.
 This is at odds with what we know from earlier work in the project, which is that:
 - The neural network similarity is a good classifier, it just doesn’t have distance information.
 - Distance alone is not a good classifier (see the distance matrices).
+
+I will try and give some vague mathematical intuition for this based on Bayes' rule, which is how the Naive Bayes classifier works. The [Wikipedia article](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) does a pretty good job of explaining the naive assumption and how the classifier works so I won't rehash that here. Assuming you're up to speed on that, the Naive Bayes will compute the following match probability for a pair of neurons that are spatially close together:
+
