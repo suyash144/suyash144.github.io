@@ -4,7 +4,15 @@
 // Import the Cayman theme's styles
 @import "{{ site.theme }}";
 
-/* Your custom styles can go here */
+/* Times New Roman font override */
+body, html, h1, h2, h3, h4, h5, h6, p, div, span, li, td, th, a, nav, blockquote, table {
+  font-family: "Times New Roman", Times, serif !important;
+}
+
+/* Keep code blocks monospace */
+code, pre, .highlight {
+  font-family: "Courier New", Courier, monospace !important;
+}
 
 // Example Navigation Styles (from _includes/header.html comments)
 nav ul {

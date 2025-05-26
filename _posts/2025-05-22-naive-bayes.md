@@ -1,13 +1,13 @@
 ---
 layout: default # Or a specific 'post' layout if you create one later
-title: "Naive Bayes: a subtle issue"
+title: "Naive Bayes naivety"
 date: 2025-05-23 15:00:00 +0100 # Date and time of publication
 author: "Suyash Agarwal" # Optional
 categories: [machine learning, research] # Optional
 tags: [statistics] # Optional
 ---
 
-## Naive Bayes
+## Naive Bayes naivety
 
 TLDR: Beware when using a Naive Bayes classifier in a situation where one or more of your features has a conditional distribution that is a delta function.
 
@@ -24,7 +24,7 @@ The information we had to do this was the following:
 To leverage the first, we trained a neural network to look at the waveforms (these are basically sets of time-series values) and compute similarity scores for these. The neural net does this by projecting the waveforms into some latent space that captures their salient features. So the first step was training an autoencoder to do this.
 We then finetuned the network using contrastive learning. I won't say much more about this as it's not the point of this post. Basically, we have a neural net that gives us waveform similarity scores, and does a good job of matching the neurons using this information. But it doesn't have the spatial information (so it looks at the shapes of the neurons' spikes but not where they are).
 
-### My naive attempt at Naive Bayes
+### My first attempt at Naive Bayes
 
 The way we had incorporated the spatial information before was to take the matches predicted by the neural network and then remove the ones that are spatially distant from each other. But we wanted to try something a bit smarter, that could take both waveform similarity and spatial distance into account at the same time, rather than having these two steps in series.
 
@@ -86,6 +86,30 @@ This is at odds with what we know from earlier work in the project, which is tha
 - The neural network similarity is a good classifier, it just doesn’t have distance information.
 - Distance alone is not a good classifier (see the distance matrices).
 
-I will try and give some vague mathematical intuition for this based on Bayes' rule. The [Wikipedia article](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) does a pretty good job of explaining the naive assumption and how the classifier works so I won't rehash that here. Assuming you're up to speed on that, the Naive Bayes will compute the following match probability for a pair of neurons that are spatially close together:
+I will try and give some vague mathematical intuition for this based on Bayes' rule. The [Wikipedia article](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) does a pretty good job of explaining the naive assumption and how the classifier works so I won't rehash that here. Assuming you're up to speed on that, the Naive Bayes will compute the following match probability for a pair of neurons that have are spatially close (this is deliberately vague, hence the lack of rigour in this section):
 
-\\[p(\text{match} \mid \text{close}) = p(\text{close} \mid \text{match}) p(\text{match}) / p(\text{close})\\]
+$$p(\text{match} \mid \text{close}) = p(\text{close} \mid \text{match}) p(\text{match}) / p(\text{close})$$
+
+And during training, we basically set $p(\text{close} \mid \text{match}) = 1$. So this collapses to
+
+$$p(\text{match} \mid \text{close}) = p(\text{match}) / p(\text{close})$$.
+
+On the other hand, if the distance is non-zero,
+
+$$p(\text{match} \mid \text{far}) = p(\text{far} \mid \text{match}) p(\text{match}) / p(\text{far})$$
+
+And $p(\text{far} \mid \text{match})$ is set to 0 during training. So the Naive Bayes can *never* assign non-zero match probability to a pair of neurons that are spatially distant. So because the conditional distribution of distance values fed into the Naive Bayes was a delta function (it is non-zero only when the distance is zero and zero everywhere else), the whole classifier totally overfits to distance. This is despite waveform similarity actually being a more informative feature. 
+
+The neural network is constrained to fit some nonlinear transformation to the actual waveforms themselves so it can't follow the spike-sorting output perfectly, hence the apparent noise in that signal.
+
+### The fix
+
+I simply re-trained the Naive Bayes, this time using a noisier spatial distance metric. I call this method NBProbCentroid below:
+<img src="{{ '/assets/images/posts/res3.png' | relative_url }}" alt="Naive Bayes vs original method" style="width: 100%;">
+
+Now that the distance feature's conditional distribution is not a delta function (due to the noise), the Naive Bayes performs much better than before!
+
+### Takeaways
+
+If you read this far, I hope you gained something from reading this post. I just wanted to try this out as a way to remember what I've done while working on cool projects, and to practice my writing skills. The Naive Bayes is a great tool to be able to use, but on this occasion there were some pitfalls that were not obvious to me at the start. As well as being aware of the conditional independence assumption, make sure your feature distributions are reasonable!
+
