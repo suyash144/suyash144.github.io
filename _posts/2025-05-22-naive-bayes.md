@@ -98,7 +98,7 @@ On the other hand, if the distance is non-zero,
 
 $$p(\text{match} \mid \text{far}) = p(\text{far} \mid \text{match}) p(\text{match}) / p(\text{far})$$
 
-And $p(\text{far} \mid \text{match})$ is set to 0 during training. So the Naive Bayes can *never* assign non-zero match probability to a pair of neurons that are spatially distant. So because the conditional distribution of distance values fed into the Naive Bayes was a delta function (it is non-zero only when the distance is zero and zero everywhere else), the whole classifier totally overfits to distance. This is despite waveform similarity actually being a more informative feature. 
+And $p(\text{far} \mid \text{match})$ is set to 0 during training. So the Naive Bayes can *never* assign non-zero match probability to a pair of neurons that are spatially distant. So because the conditional distribution of distance values fed into the Naive Bayes was a delta function (it is non-zero only when the distance is zero and zero everywhere else) and this is not the case for waveform similarity, the whole classifier totally overfits to distance. This is despite waveform similarity actually being a more informative feature. 
 
 The neural network is constrained to fit some nonlinear transformation to the actual waveforms themselves so it can't follow the spike-sorting output perfectly, hence the apparent 'noise' in that signal.
 
