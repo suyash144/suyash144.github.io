@@ -30,11 +30,11 @@ The way we had incorporated the spatial information before was to take the match
 
 To this end, we thought a Naive Bayes could work with the neural network similarity and distance between two neurons as its two features. Here, each sample is a pair of neurons. I trained one of these using a kernel density estimator to get conditional distributions for each feature (conditioned on our two labels; match and non-match). All seemed well and I expected this to do at least as well as the neural network with spatial filtering and *much* better than the neural network alone. But...
 
-<img src="{{ '/assets/images/posts/res.png' | relative_url }}" alt="Suyash Agarwal" style="width: 100%;">
+<img src="{{ '/assets/images/posts/res.png' | relative_url }}" alt="Naive Bayes vs original method" style="width: 100%;">
 
 To explain this, the left plot is AUC (an accuracy score between 0 and 1) and the right plot is the number of matches found. The two axes are the original method (neural network similarity scores followed by spatial filtering on the x-axis) and the new Naive Bayes method (on the y-axis). Each point represents a pair of recording sessions on which our two performance metrics were computed. You can see that the Naive Bayes is not performing as well as the original method. What if we compare it to the original method without any spatial filtering? If the Naive Bayes doesn't win that comparison then something has to be wrong.
 
-<img src="{{ '/assets/images/posts/res2.png' | relative_url }}" alt="Suyash Agarwal" style="width: 100%;">
+<img src="{{ '/assets/images/posts/res2.png' | relative_url }}" alt="Naive Bayes vs original method" style="width: 100%;">
 
 Hmm. The Naive Bayes (which has both waveform similarity and spatial information to work with) has a similar AUC to a method that only looks at waveform similarity. The latter also finds *more* matches, though this may just be because the spatial filtering step acts only to reduce the number of matches returned.
 
@@ -52,7 +52,7 @@ For each feature (similarity and distance), we can make conditional distribution
 To investigate the poor performance, I went back to a plot that we often use for sanity-checking. We just take a single pair of sessions and organise the neurons into a matrix. Each cell in the matrix is the value of some metric for the corresponding pair of neurons. The top-left and bottom-right parts of the matrix are comparing neurons within the same session while the other two are comparing across sessions. In the ideal case, each of the four sub-matrices would have a strong diagonal with everything off-diagonal being small. We should at least expect this to be the the case for the main diagonal of the full matrix, as neurons are generally more similar to themselves than to other neurons. We can see this for the neural net similarity matrix:
 
 
-<img src="{{ '/assets/images/posts/dnnsim.png' | relative_url }}" alt="Suyash Agarwal" style="width: 50%; text-align: center;">
+<img src="{{ '/assets/images/posts/dnnsim.png' | relative_url }}" alt="Waveform similarity matrix" style="width: 50%; text-align: center;">
 
 The main diagonal is strong, with weaker sub-diagonals for the two across-session sub-matrices. This gives us some indication that this method will perform well at matching neurons, as:
 - We have a metric that confirms that neurons are more similar to themselves than to other neurons.
@@ -60,17 +60,17 @@ The main diagonal is strong, with weaker sub-diagonals for the two across-sessio
 
  But for the Naive Bayes match probabilities:
 
-<img src="{{ '/assets/images/posts/NBProb.png' | relative_url }}" alt="Suyash Agarwal" style="width: 50%; text-align: center;">
+<img src="{{ '/assets/images/posts/NBProb.png' | relative_url }}" alt="Naive Bayes output" style="width: 50%; text-align: center;">
 
 We have large off-diagonal match probabilities for the same-session sub-matrices. This is despite explicitly labelling these as *different* neurons during training. So why is this happening?
 
 The Naive Bayes has two features to work with: waveform similarity and spatial distance. We've seen the waveform similarity matrix and it looks fine. It can't explain the patterns we observe in the Naive Bayes output so let's look at the same matrix with distance.
 
-<img src="{{ '/assets/images/posts/distance.png' | relative_url }}" alt="Suyash Agarwal" style="width: 50%; text-align: center;">
+<img src="{{ '/assets/images/posts/distance.png' | relative_url }}" alt="Distance matrix" style="display: block; width: 50%; margin-left: auto; margin-right: auto;">
 
 Hard to read anything from this. But we can see that the scale goes up to over 2500um. This is after drift correction (where we correct for the overall shift in electrode position between the two sessions) so any pair of neurons with a distance over around 150um is highly unlikely to be the same neuron. We can just focus on the pairs that have a chance of being the same neuron by clipping the values at 150um:
 
-<img src="{{ '/assets/images/posts/distance_clipped.png' | relative_url }}" alt="Suyash Agarwal" style="width: 50%; text-align: center;">
+<img src="{{ '/assets/images/posts/distance_clipped.png' | relative_url }}" alt="Distance matrix" style="display: block; width: 50%; margin-left: auto; margin-right: auto;">
 
 Now everything at 150um and over is white. And we see the same patterns we saw in the Naive Bayes output matrix! So it looks like the Naive Bayes is assigning high match probability to neurons that have 'low' spatial distance, even though it was told during training that these are not matches.
 This is in contrast to the neural network output, where these same pairs generally have low waveform similarity.
@@ -80,3 +80,8 @@ Effectively, the Naive Bayes is being given somewhat contradictory information. 
 So given contradictory information (low distance *and* low waveform similarity simultaneously), the question is which feature will the Naive Bayes listen to more?
 
 ### Some very hand-wavey maths
+
+From a training point of view, the Naive Bayes learns that every neuron that is a match (which we define as on-diagonal, within-session neurons, ie the spike-sorting output) has 0 distance by construction. Likewise, most non-match pairs have non-zero distance (different neurons in the same session are unlikely to be in the same spatial location). So from the perspective of the NB, it can achieve near-perfect classification accuracy by only looking at distance! Waveform similarity on the other hand is a much noisier signal so will be weighted less as a feature.
+This is at odds with what we know from earlier work in the project, which is that:
+- The neural network similarity is a good classifier, it just doesn’t have distance information.
+- Distance alone is not a good classifier (see the distance matrices).
