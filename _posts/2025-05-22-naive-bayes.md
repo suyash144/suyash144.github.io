@@ -44,7 +44,7 @@ Hmm. The Naive Bayes (which has both waveform similarity and spatial information
 Before we can understand what is going wrong here, I need to detail how exactly I trained the Naive Bayes. This requires labelled data, which is something that we always struggle with in this project. We never actually have ground truth neuron labels, so the machine learning methods we could use were either self-supervised (training the autoencoder) or they used a quasi-ground truth that we could construct from the fact that within a session, we know which spikes come from which neuron thanks to upstream spike-sorting software. We also have two copies of each neuron's waveform (averaged over the first and second half of the session). This means we can do contrastive learning if we train only on within-session data, because we have pairs of neurons which are the same and pair of neurons which are different (at least as far as we trust spike sorting). I adopted the same strategy when training the Naive Bayes.
 
 
-For each feature (similarity and distance), we can make conditional distributions $p(\text{feature} | \text{label})$ for each label (match and non-match) by comparing neurons to their other copies for match pairs and comparing them to other neurons for non-match pairs. 
+For each feature (similarity and distance), we can make conditional distributions $p(\text{feature} \mid \text{label})$ for each label (match and non-match) by comparing neurons to their other copies for match pairs and comparing them to other neurons for non-match pairs. 
 
 
 ### Understanding the issue
