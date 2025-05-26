@@ -44,22 +44,39 @@ Hmm. The Naive Bayes (which has both waveform similarity and spatial information
 Before we can understand what is going wrong here, I need to detail how exactly I trained the Naive Bayes. This requires labelled data, which is something that we always struggle with in this project. We never actually have ground truth neuron labels, so the machine learning methods we could use were either self-supervised (training the autoencoder) or they used a quasi-ground truth that we could construct from the fact that within a session, we know which spikes come from which neuron thanks to upstream spike-sorting software. We also have two copies of each neuron's waveform (averaged over the first and second half of the session). This means we can do contrastive learning if we train only on within-session data, because we have pairs of neurons which are the same and pair of neurons which are different (at least as far as we trust spike sorting). I adopted the same strategy when training the Naive Bayes.
 
 
-For each feature (similarity and distance), we can make conditional distributions $$p(feature | label)$$ for each label (match and non-match) by comparing neurons to their other copies for positive pairs and comparing them to other neurons for negative pairs. 
+For each feature (similarity and distance), we can make conditional distributions $p(\text{feature} | \text{label})$ for each label (match and non-match) by comparing neurons to their other copies for match pairs and comparing them to other neurons for non-match pairs. 
 
 
 ### Understanding the issue
 
-To investigate the poor performance, I went back to a plot that we often use for sanity-checking (credit to Célian Bimbard for the idea). We just take a single pair of sessions and organise the neurons into a matrix. Each cell in the matrix is the value of some metric for the corresponding pair of neurons. The top-left and bottom-right parts of the matrix are comparing neurons within the same session while the other two are comparing across sessions. In the ideal case, each sub-matrix would have a strong diagonal with everything off-diagonal being small. We should at least expect this to be the the case for the main diagonal of the full matrix, as neurons are generally more similar to themselves than to other neurons. We can see this for the neural net similarity matrix:
+To investigate the poor performance, I went back to a plot that we often use for sanity-checking. We just take a single pair of sessions and organise the neurons into a matrix. Each cell in the matrix is the value of some metric for the corresponding pair of neurons. The top-left and bottom-right parts of the matrix are comparing neurons within the same session while the other two are comparing across sessions. In the ideal case, each of the four sub-matrices would have a strong diagonal with everything off-diagonal being small. We should at least expect this to be the the case for the main diagonal of the full matrix, as neurons are generally more similar to themselves than to other neurons. We can see this for the neural net similarity matrix:
 
 
-<img src="{{ '/assets/images/posts/dnnsim.png' | relative_url }}" alt="Suyash Agarwal" style="width: 50%;">
+<img src="{{ '/assets/images/posts/dnnsim.png' | relative_url }}" alt="Suyash Agarwal" style="width: 50%; text-align: center;">
 
-The main diagonal is strong, with weaker sub-diagonals for the two across-session sub-matrices. This gives us some indication that this method will perform well at matching neurons. But for the Naive Bayes match probabilities:
+The main diagonal is strong, with weaker sub-diagonals for the two across-session sub-matrices. This gives us some indication that this method will perform well at matching neurons, as:
+- We have a metric that confirms that neurons are more similar to themselves than to other neurons.
+- The metric is also able to identify potential matches across sessions.
 
-<img src="{{ '/assets/images/posts/NBProb.png' | relative_url }}" alt="Suyash Agarwal" style="width: 50%;">
+ But for the Naive Bayes match probabilities:
+
+<img src="{{ '/assets/images/posts/NBProb.png' | relative_url }}" alt="Suyash Agarwal" style="width: 50%; text-align: center;">
 
 We have large off-diagonal match probabilities for the same-session sub-matrices. This is despite explicitly labelling these as *different* neurons during training. So why is this happening?
 
+The Naive Bayes has two features to work with: waveform similarity and spatial distance. We've seen the waveform similarity matrix and it looks fine. It can't explain the patterns we observe in the Naive Bayes output so let's look at the same matrix with distance.
 
+<img src="{{ '/assets/images/posts/distance.png' | relative_url }}" alt="Suyash Agarwal" style="width: 50%; text-align: center;">
 
+Hard to read anything from this. But we can see that the scale goes up to over 2500um. This is after drift correction (where we correct for the overall shift in electrode position between the two sessions) so any pair of neurons with a distance over around 150um is highly unlikely to be the same neuron. We can just focus on the pairs that have a chance of being the same neuron by clipping the values at 150um:
 
+<img src="{{ '/assets/images/posts/distance_clipped.png' | relative_url }}" alt="Suyash Agarwal" style="width: 50%; text-align: center;">
+
+Now everything at 150um and over is white. And we see the same patterns we saw in the Naive Bayes output matrix! So it looks like the Naive Bayes is assigning high match probability to neurons that have 'low' spatial distance, even though it was told during training that these are not matches.
+This is in contrast to the neural network output, where these same pairs generally have low waveform similarity.
+
+Effectively, the Naive Bayes is being given somewhat contradictory information. It is trained to assign high match probabilities when distances are low and waveform similarities are high. For these problematic within-session pairs, similarity is low but distance is also relatively low. This is where the range of distances that we include in training data becomes a problem. 150um is actually still a fairly high distance; it just seems low compared to 2500um. In fact, anything over 150um is almost guaranteed not to be a match so the vast majority (over 90%) of the distance 'signal' tells us nothing.
+
+So given contradictory information (low distance *and* low waveform similarity simultaneously), the question is which feature will the Naive Bayes listen to more?
+
+### Some very hand-wavey maths
