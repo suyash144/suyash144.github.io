@@ -58,11 +58,11 @@ The main diagonal is strong, with weaker sub-diagonals for the two across-sessio
 - We have a metric that confirms that neurons are more similar to themselves than to other neurons.
 - The metric is also able to identify potential matches across sessions.
 
- But for the Naive Bayes match probabilities:
+Note that the ordering of the neurons here will affect the overall appearance of the matrix. I haven't done it here for consistency with later figures but if you sort by depth, you see a much stronger effect. But for the Naive Bayes match probabilities:
 
 <img src="{{ '/assets/images/posts/NBProb.png' | relative_url }}" alt="Naive Bayes output" style="display: block; width: 50%; margin-left: auto; margin-right: auto;">
 
-We have large off-diagonal match probabilities for the same-session sub-matrices. This is despite explicitly labelling these as *different* neurons during training. So why is this happening?
+We have large off-diagonal match probabilities for the same-session sub-matrices. This is despite explicitly labelling these as *different* neurons during training. The output is also worryingly binary - in contrast with the neural network output values. So why is this happening?
 
 The Naive Bayes has two features to work with: waveform similarity and spatial distance. We've seen the waveform similarity matrix and it looks fine. It can't explain the patterns we observe in the Naive Bayes output so let's look at the same matrix with distance.
 
