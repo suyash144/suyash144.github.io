@@ -79,28 +79,21 @@ Effectively, the Naive Bayes is being given somewhat contradictory information. 
 
 So given contradictory information (low distance *and* low waveform similarity simultaneously), the question is which feature will the Naive Bayes listen to more?
 
-### Some very hand-wavey maths
+### A tiny bit of maths
 
 From a training point of view, the Naive Bayes *by construction* learns that every neuron that is a match (which we define as on-diagonal, within-session neurons, ie the spike-sorting output) has 0 distance. Likewise, most non-match pairs have non-zero distance (different neurons in the same session are unlikely to be in the same spatial location). So from the perspective of the Naive Bayes, it can achieve near-perfect classification accuracy by only looking at distance! Waveform similarity on the other hand is a much noisier signal so will be weighted less as a feature.
 This is at odds with what we know from earlier work in the project, which is that:
 - The neural network similarity is a good classifier, it just doesn’t have distance information.
 - Distance alone is not a good classifier (see the distance matrices).
 
-I will try and give some vague mathematical intuition for this based on Bayes' rule. The [Wikipedia article](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) does a pretty good job of explaining the naive assumption and how the classifier works so I won't rehash that here. Assuming you're up to speed on that, the Naive Bayes will compute the following match probability for a pair of neurons that are spatially close (this is deliberately vague, hence the lack of rigour in this section):
+I will try and give some hand-wavey non-rigorous mathematical intuition for this. I have been told that no one will read these things if I stuff them full of equations so I will limit myself as much as possible. Luckily, the [Wikipedia article](https://en.wikipedia.org/wiki/Naive_Bayes_classifier) does a pretty good job of explaining the conditional independence assumption and how the classifier works so I won't rehash that here. Assuming you're up to speed on that, the Naive Bayes will compute the following match probability for a pair of neurons that have waveform similarity $s$ and spatial distance $d$ (this is deliberately vague, hence the lack of rigour in this section):
 
-$$p(\text{match} \mid \text{close}) = p(\text{close} \mid \text{match}) p(\text{match}) / p(\text{close})$$
+$$p(\text{match} \mid \text{similarity}=s, \text{distance}=d) \propto p(\text{match}) p(s \mid \text{match}) p(d \mid \text{match})$$
 
-And during training, we basically set $p(\text{close} \mid \text{match}) = 1$. So this collapses to
+Here, we can see the 'naive' assumption of the Naive Bayes coming into play as we can simply multiply the conditional probabilities $p(s \mid \text{match})$ and $p(d \mid \text{match})$ to get the joint conditional $p(s, d \mid \text{match})$. The proportionality constant is $p(s, d)$ as per Bayes' rule but we omit it here as it's not relevant since we only care about the relative magnitudes of $p(\text{match} \mid \text{similarity}=s, \text{distance}=d)$ and $p(\text{non-match} \mid \text{similarity}=s, \text{distance}=d)$. After normalising, these have to sum to 1 anyway so we only need to calculate match probability.
 
-$$p(\text{match} \mid \text{close}) = p(\text{match}) / p(\text{close})$$
-
-On the other hand, if the distance is non-zero,
-
-$$p(\text{match} \mid \text{far}) = p(\text{far} \mid \text{match}) p(\text{match}) / p(\text{far})$$
-
-And $p(\text{far} \mid \text{match})$ is set to 0 during training. So the Naive Bayes can *never* assign non-zero match probability to a pair of neurons that are spatially distant. So because the conditional distribution of distance values fed into the Naive Bayes was a delta function (it is non-zero only when the distance is zero and zero everywhere else) and this is not the case for waveform similarity, the whole classifier totally overfits to distance. This is despite waveform similarity actually being a more informative feature. 
-
-The neural network is constrained to fit some nonlinear transformation to the actual waveforms themselves so it can't follow the spike-sorting output perfectly, hence the apparent 'noise' in that signal.
+During training, we basically set $p(d \mid \text{match}) \approx \delta(0)$ as described above. So the Naive Bayes can *almost never* assign non-zero match probability to a pair of neurons that are spatially distant. Because the conditional distribution of distance values fed into the Naive Bayes was close to a delta function (in that it is non-zero only when the distance is zero and zero almost everywhere else) and this is not the case for waveform similarity, the whole classifier totally overfits to distance. This is despite waveform similarity actually being a more informative feature.
+The neural network is constrained to fit some nonlinear transformation to the actual waveforms themselves so it can't align with the spike-sorting output perfectly, hence the apparent 'noise' in that signal.
 
 ### The fix
 
@@ -111,5 +104,5 @@ Now that the distance feature's conditional distribution is not a delta function
 
 ### Takeaways
 
-If you read this far, I hope you gained something from reading this post. I just wanted to try this out as a way to remember what I've done while working on cool projects, and to practice my writing skills. The Naive Bayes is a great tool to be able to use, but on this occasion there were some pitfalls that were not obvious to me at the start. As well as being aware of the conditional independence assumption, make sure your feature distributions are reasonable!
+If you read this far, I hope you gained something from this post. I just wanted to try this out as a way to remember what I've done while working on cool projects, and to practice my writing skills. The Naive Bayes is a great tool to be able to use, but on this occasion there were some pitfalls that were not obvious to me at the start. As well as being aware of the conditional independence assumption, make sure your feature distributions are reasonable!
 
