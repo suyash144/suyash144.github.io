@@ -9,7 +9,7 @@ I am currently a Research Software Engineer at Cortexlab, UCL Queen Square Insti
 
 I work on machine learning methods for computational neuroscience with Prof. Kenneth Harris.
 
-[**Click here to try out Alfred, an AI data analysis tool I developed**](https://alfredthescientist.com)
+[*Click here to try out Alfred, an AI data analysis tool I developed*](https://alfredthescientist.com)
 
 Before moving to London, I was at Oxford University for 4 years studying for my MEng degree. During this time, I spent a summer at the Computer Vision Lab at ETH Zurich.
 
