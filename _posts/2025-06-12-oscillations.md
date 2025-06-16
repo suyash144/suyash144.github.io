@@ -1,7 +1,7 @@
 ---
 layout: default # Or a specific 'post' layout if you create one later
 title: "Adventures in detecting neural oscillations"
-date: 2025-05-23 15:00:00 +0100 # Date and time of publication
+date: 2025-06-12 15:00:00 +0100 # Date and time of publication
 author: "Suyash Agarwal" # Optional
 categories: [neuroscience, research] # Optional
 tags: [signal processing] # Optional
@@ -29,7 +29,7 @@ Does this work? Kind of. By eye you can see that there are areas in the raster p
 
 <img src="{{ '/assets/images/posts/raster.png' | relative_url }}" alt="Raster map with oscillations" style="width: 100%;">
 
-I've also pointed out a couple of fairly clear down phases which are missed. So what's going wrong? Is the trusty Fourier transform *not* the right tool for this job?
+So what's going wrong? Is the trusty Fourier transform *not* the right tool for this job?
 
 ### Limitations of the Fourier transform
 
@@ -42,7 +42,7 @@ This sounds great, but comes with some caveats:
 - I actually use scipy's implementation of [Welch's method](https://en.wikipedia.org/wiki/Welch%27s_method) for spectral density estimation. Compared to a simple short-time Fourier transform, this gives you less noise in exchange for slightly worse frequency resoluton. Since I only really care about frequencies in the broad range 1-10 Hz, this was a fine trade-off to make. When we interpret the PSD, we make the implicit assumption that the signal is a linear superposition of independent oscillators (i.e. total power is the sum of power in different frequency ranges). I lean into this even more when I normalise the power in the range of interest by total power to get oscillation strength. If there are different frequency components that interact with each other, this isn't really valid.
 - Finally, we only used the *magnitude* of the frequency spectrum to do this oscillatory period detection. This completely ignores all the phase information. To see why this is important, see a picture from my undergrad lectures on image processing:
 
-<img src="{{ '/assets/images/posts/phase.png' | relative_url }}" alt="Images with phase and magnitude swapped" style="width: 50%;">
+<img src="{{ '/assets/images/posts/phase.png' | relative_url }}" alt="Images with phase and magnitude swapped" style="display: block; width: 50%; margin-left: auto; margin-right: auto;">
 
 At the top are two different images, and they swap the magnitudes and phases of their respective 2D Fourier transforms. The bottom images look much more similar to the whichever image they inherited the phase from, indicating that phase actually contains more useful information about the original signal than the magnitude.
 
@@ -62,7 +62,7 @@ whether or not a method was picking out clear down phases as being oscillatory, 
 This is *not* what Fourier transforms, wavelet transforms or Hilbert transforms are really designed to do. These are all great techniques for doing time-frequency analysis and crucially, they all make me feel very much like an engineer. But none of them is designed to just tell you when the population is firing less than usual (indicating we're in a down phase). 
 So I went back to basics and looked at the distribution of spike counts in each 10ms bin to see if there was an obvious way to threshold this and pick out down phases that way.
 
-<img src="{{ '/assets/images/posts/histogram.png' | relative_url }}" alt="Distribution of firing rates" style="width: 50%;">
+<img src="{{ '/assets/images/posts/histogram.png' | relative_url }}" alt="Distribution of firing rates" style="display: block; width: 50%; margin-left: auto; margin-right: auto;">
 
 And there is! It looks like firing rate is roughly normally distributed with a big extra peak at 0. These extra bins are likely the down phases we've been looking for. So here's a raster plot with the newly discovered down phases highlighted. I also set 1 second windows with a a certain number of down phases to be oscillatory and highlighted these. You can see that the results now look a lot better.
 
