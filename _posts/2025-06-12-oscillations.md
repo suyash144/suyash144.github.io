@@ -62,7 +62,7 @@ Now we can get into some serious time-frequency analysis. Wavelet transforms get
 
 This is the complex Morlet wavelet. And here are the results:
 
-<img src="{{ '/assets/images/posts/rand_phase.png' | relative_url }}" alt="Population firing rate with/without randomised phase" style="width: 100%;">
+<img src="{{ '/assets/images/posts/wavelet.png' | relative_url }}" alt="Wavelet transform analysis" style="width: 100%;">
 
 Once again, the top plot is the raster with the oscillatory periods highlighted. Below this is the population firing rate. Below that is the frequency spectrum, also over the first 60s. Below that is where is gets interesting. You can see the wavelet frequency power in the 1-10 Hz range in red and the baseline power that we compare to in blue. I then z-score the red using the blue to get the normalised power (green line in the bottom plot) and the z-score the normalised power relative to itself to get the pink line. This is what I threshold to detect oscillatory periods. And as for the results? Definitely better than the Fourier transform. For instance, the very obvious oscillations around the 10s mark are now being detected. But we still miss some, like around the 38s mark. Looking at the lower plots, we can see that this is because the baseline power and 1-10 Hz power both peak at this point, and while the difference between them is enough to pass the detection threshold, this oscillation doesn't last long enough to make the final grade.
 
