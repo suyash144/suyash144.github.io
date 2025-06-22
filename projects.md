@@ -12,9 +12,9 @@ A neural network method for tracking neurons via their electrophysiological spik
 <img src="{{ '/assets/images/alfred-logo.png' | relative_url }}" alt="Alfred" style="float: right; width: 150px; margin-left: 20px; border-radius: 10%;">
 
 ### Alfred
-An LLM-powered tool for automatic data analysis, used by scientists at Cortexlab, Google DeepMind and the International Brain Lab. If you have an API key from Google, Anthropic or OpenAI, you can [try it out here](https://alfredthescientist.com/).
+An LLM-powered tool for automatic data analysis, used by scientists at UCL, Google DeepMind and the International Brain Lab, as well as professionals across industries such as consulting and finance. You can [try it out here](https://alfredthescientist.com/) or read a [short post explaining how to use it](https://suyash144.github.io/ai/research/data%20science/2025/05/27/alfred.html). The central idea is to keep the human in the loop and get AI to speed up all the boring bits of your data analysis so that you can focus on the interesting parts. You don't need any programming knowledge to gain from using the tool, and you get to decide how close to the code you want to be.
 
-I am the sole developer on this project, built using Python and Flask for the backend and React and NodeJS for the frontend. The currently supported LLMs are Gemini 2.5 Pro, Claude 4 Sonnet, GPT-4.1 and o1.
+I am the sole developer on this project, built using Python and Flask for the backend and React and NodeJS for the frontend. The currently supported LLMs are Claude 4 Sonnet, Gemini 2.5 Pro, GPT-4.1 and o1.
 
 ### Other Work
 I am also doing some work with the Visual Geometry Group (VGG) at Oxford, where my focus is on improving transformer efficiency for video generation.
