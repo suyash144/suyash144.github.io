@@ -16,7 +16,7 @@ A lot of exciting work is being done in AI safety at the moment, both at private
 
 Control theory is a branch of engineering and applied mathematics that deals with dynamical systems and getting some desired behaviour out of them. This usually means developing a model or algorithm to steer a system towards a desired state. The reason why I think now could be a good time to bring together control theory and LLMs is that LLMs are increasingly being used as components within larger software systems (see [Alfred](http://alfredthescientist.com/) for an example I made). This is not a new observation - the authors of the paper I mentioned at the beginning of this post are well aware of this motivation for developing a way to inform the inputs and control the outputs of this LLM system. 
 
-<img src="{{ '/assets/images/posts/res.png' | relative_url }}" alt="Naive Bayes vs original method" style="width: 100%;">
+<img src="{{ '/assets/images/posts/res.png' | relative_url }}" alt="LLMs as control systems" style="width: 100%;">
 
 
 
