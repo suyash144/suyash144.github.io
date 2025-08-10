@@ -34,7 +34,7 @@ $$x_{t+1} = f(x_t, u_t) + w_t$$
 
 $$y_t = h(x_t) + v_t$$
 
-Here, $f$ is unknown as it capture the transformer forward pass and some update of the latent internal variables across generation steps. $h$ maps internal state to model output with some associated measurement noise $v_t$. Then the goal is to design a controller $u_t$ which is some feedback law based on estimated state $\hat{x}_t$ and its history up to generation step $t$. The aim of this would be to keep output behaviour in a specified safe set using minimal control input tokens while being robust to model uncertainty and adversarial inputs. The fields of robust control and optimal control seem well-equipped to handle this, but I suspect the main issue with this in practice would be the huge state space of possible token sequences. 
+Here, $f$ is unknown as it captures the transformer forward pass and some update of the latent internal variables across generation steps. $h$ maps internal state to model output with some associated measurement noise $v_t$. Then the goal is to design a controller $u_t$ which is some feedback law based on estimated state $\hat{x}_t$ and its history up to generation step $t$. The aim of this would be to keep output behaviour in a specified safe set using minimal control input tokens while being robust to model uncertainty and adversarial inputs. The fields of robust control and optimal control seem well-equipped to handle this, but I suspect the main issue with this in practice would be the huge state space of possible token sequences. 
 
 Within this framework, interpretability (or at least some aspects of it) can be thought of as state estimation:
 
