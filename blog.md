@@ -9,10 +9,12 @@ Welcome to my blog! Here I'll share updates on projects, thoughts on machine lea
 
 <ul>
   {% for post in site.posts %}
+    {% if post.published != false %}
     <li>
       <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
       <p><small>Published on {{ post.date | date: "%B %d, %Y" }}</small></p>
     </li>
+    {% endif %}
   {% endfor %}
 </ul>
 

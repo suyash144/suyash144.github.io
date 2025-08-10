@@ -3,8 +3,9 @@ layout: default # Or a specific 'post' layout if you create one later
 title: "Control theory of LLMs"
 date: 2025-06-18 15:00:00 +0100 # Date and time of publication
 author: "Suyash Agarwal" # Optional
+published: true
 categories: [research, AI, control, safety] # Optional
-tags: [] # Optional
+tags: [alignment] # Optional
 ---
 
 ## Appyling control theory to LLMs
