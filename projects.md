@@ -16,8 +16,10 @@ An LLM-powered tool for automatic data analysis, used by scientists at UCL, Goog
 
 I am the sole developer on this project, built using Python and Flask for the backend and React and NodeJS for the frontend. The currently supported LLMs are Claude 4 Sonnet, Gemini 2.5 Pro, GPT-4.1 and o1.
 
-### Other Work
-I am also doing some work with the Visual Geometry Group (VGG) at Oxford, where my focus is on improving transformer efficiency for video generation.
+### Suite3D
+I am working on a representation learning project using volumetric cell imaging data acquired via [Suite3D](https://www.biorxiv.org/content/10.1101/2025.03.26.645628v1). Here's a nice UMAP to show some work in progress.
+
+<img src="{{ '/assets/images/umap_2d_hdbscan.png' | relative_url }}" alt="UMAP plot" style="width: 60%; margin-bottom: 15px; margin-top: 10px;">
 
 ### Bayesian Radar Cosplace
 My Masters' research project at the Oxford Robotics Institute, skillfully supervised by Matt Gadd and Paul Newman. We published an article on the project [here](https://doi.org/10.1049/rsn2.70002).
