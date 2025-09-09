@@ -17,7 +17,7 @@ An LLM-powered tool for automatic data analysis, used by scientists at UCL, Goog
 I am the sole developer on this project, built using Python and Flask for the backend and React and NodeJS for the frontend. The currently supported LLMs are Claude 4 Sonnet, Gemini 2.5 Pro, GPT-4.1 and o1.
 
 ### Suite3D
-I am working on a representation learning project using volumetric cell imaging data acquired via [Suite3D](https://www.biorxiv.org/content/10.1101/2025.03.26.645628v1). Here's a nice UMAP to show some work in progress.
+I am working on a data curation tool for volumetric cell imaging data acquired via [Suite3D](https://www.biorxiv.org/content/10.1101/2025.03.26.645628v1). Here's a nice UMAP to show some work in progress.
 
 <img src="{{ '/assets/images/umap_2d_hdbscan.png' | relative_url }}" alt="UMAP plot" style="width: 60%; margin-left: auto; margin-right: auto;">
 
