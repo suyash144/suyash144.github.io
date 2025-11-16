@@ -1,6 +1,6 @@
 ---
 layout: default # Or a specific 'post' layout if you create one later
-title: "Adventures in detecting neural oscillations"
+title: "Detecting neural oscillations in electrophysiology data"
 date: 2025-06-12 15:00:00 +0100 # Date and time of publication
 author: "Suyash Agarwal" # Optional
 published: true
